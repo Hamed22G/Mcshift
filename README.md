@@ -1,17 +1,12 @@
-# CrewFlow Pro — Made by Hamed
+# ShiftWise
 
-Modern McDonald's shift tracker with:
+Modern shift tracker made by Hamed.
 
-- Break / pauze minutes
-- 40% bonus after 00:00
-- Monthly earned money calculation
-- Roster text import
-- JSON backup / restore
-- Dark and light mode
-
-Upload all files to GitHub Pages:
-
+## Upload to GitHub Pages
+Upload these files to your GitHub repository:
 - index.html
 - style.css
 - app.js
 - README.md
+
+Then go to Settings → Pages → Deploy from branch → main → root.
