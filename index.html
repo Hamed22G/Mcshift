@@ -1,129 +1,38 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShiftWise — Made by Hamed</title>
-  <meta name="theme-color" content="#070A14" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="scene"><span></span><span></span><span></span></div>
-  <main class="app">
-    <header class="hero">
-      <nav class="topbar">
-        <div class="brand">
-          <div class="logo">SW</div>
-          <div>
-            <b>ShiftWise</b>
-            <small>Made by Hamed</small>
-          </div>
-        </div>
-        <div class="top-actions">
-          <button id="themeBtn" class="icon-btn" type="button" aria-label="Theme">🌙</button>
-          <div class="live-time"><i></i><span id="clock">--:--</span></div>
-        </div>
-      </nav>
-
-      <section class="hero-inner">
-        <div class="intro">
-          <p class="eyebrow" id="greeting">Goedemorgen Hamed</p>
-          <h1>Mijn diensten,<br><span>premium geregeld.</span></h1>
-          <p class="intro-text">Een moderne shift tracker met pauze, salaris, rooster import en automatisch <b>40% nachtbonus na 00:00</b>.</p>
-          <div class="hero-actions">
-            <a href="#add" class="btn primary">+ Dienst toevoegen</a>
-            <button class="btn ghost" type="button" onclick="fillDemo()">Demo invullen</button>
-          </div>
-        </div>
-
-        <aside class="pay-card">
-          <div class="pay-top">
-            <span>Deze maand</span>
-            <b>140% na 00:00</b>
-          </div>
-          <strong id="earnedBig">€0</strong>
-          <div class="target">
-            <div class="target-ring"><em id="targetPct">0%</em></div>
-            <div>
-              <b>Maand target</b>
-              <span>120 uur doel</span>
-            </div>
-          </div>
-          <div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        </aside>
-      </section>
-    </header>
-
-    <section class="stats">
-      <article><span>Deze week</span><b id="weekHours">0h</b><small id="weekCount">0 diensten</small></article>
-      <article><span>Deze maand</span><b id="monthHours">0h</b><small id="monthCount">0 diensten</small></article>
-      <article><span>Verdiend</span><b id="earnedSmall">€0</b><small>incl. bonus</small></article>
-      <article class="night"><span>Nachtbonus</span><b id="bonusSmall">€0</b><small id="nightHours">0h na 00:00</small></article>
-      <article><span>Aankomend</span><b id="nextShift">–</b><small id="nextInfo">niets gepland</small></article>
-    </section>
-
-    <section class="workbench" id="add">
-      <form class="card form-card" onsubmit="event.preventDefault(); addShift();">
-        <div class="section-head">
-          <div><p class="eyebrow">Planner</p><h2>Nieuwe dienst</h2></div>
-          <span class="tag">Break + bonus fixed</span>
-        </div>
-        <div class="form-grid">
-          <label>Datum<input id="date" type="date" required></label>
-          <label>Start<input id="start" type="time" value="17:30" required></label>
-          <label>Einde<input id="end" type="time" value="01:30" required></label>
-          <label>Pauze minuten<input id="break" type="number" min="0" value="30"></label>
-          <label>Uurloon €<input id="rate" type="number" min="0" step="0.01" value="12.41"></label>
-          <label>Positie<input id="position" placeholder="MPS, Close, Lobby..."></label>
-          <label class="wide">Notitie<input id="note" placeholder="Bijv. close, training, extra druk..."></label>
-        </div>
-        <button class="btn primary full" type="submit">Dienst opslaan</button>
-      </form>
-
-      <aside class="card import-card">
-        <div class="section-head">
-          <div><p class="eyebrow">Smart import</p><h2>Rooster uit Gmail</h2></div>
-          <span class="tag dark">30 min pauze</span>
-        </div>
-        <textarea id="importText" placeholder="Plak hier roostertekst, bijvoorbeeld:
-vrijdag 17 juli 2026 20:30 - 02:30, MPS
-za 18 jul 2026 17:30-01:30 Close"></textarea>
-        <div class="action-grid">
-          <button class="btn ghost" type="button" onclick="importShifts()">Importeer</button>
-          <button class="btn ghost" type="button" onclick="downloadBackup()">Backup</button>
-          <label class="btn ghost upload">JSON<input type="file" id="fileImport" accept="application/json" onchange="restoreBackup(event)"></label>
-          <button class="btn danger" type="button" onclick="clearAll()">Wis alles</button>
-        </div>
-        <p class="hint">Bugfix: “Nog geen diensten” verdwijnt direct als je een dienst toevoegt. Alle diensten blijven zichtbaar onder Mijn diensten.</p>
-      </aside>
-    </section>
-
-    <section class="card shifts-card">
-      <div class="section-head list-head">
-        <div>
-          <p class="eyebrow" id="todayLine">Goedemorgen Hamed</p>
-          <h2>Mijn diensten</h2>
-        </div>
-        <div class="filters">
-          <input id="search" oninput="render()" placeholder="Zoek dienst...">
-          <select id="range" onchange="render()">
-            <option value="all">Alle diensten</option>
-            <option value="week">Deze week</option>
-            <option value="month">Deze maand</option>
-            <option value="future">Aankomend</option>
-          </select>
-        </div>
-      </div>
-      <div id="shiftCountLine" class="count-line">0 diensten opgeslagen</div>
-      <div id="list" class="shift-list"></div>
-    </section>
-
-    <footer>Designed & coded by <b>Hamed</b> · ShiftWise © 2026</footer>
-  </main>
-  <div id="toast" class="toast">Saved</div>
-  <script src="app.js"></script>
-</body>
-</html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ShiftWise Galaxy Pro — Made by Hamed</title>
+<meta name="theme-color" content="#060712" />
+<style>
+:root{--bg:#060712;--text:#f8f7ff;--muted:#aab0d7;--glass:rgba(255,255,255,.08);--glass2:rgba(255,255,255,.13);--line:rgba(255,255,255,.16);--cyan:#52f5ff;--pink:#ff46d0;--violet:#8b5cf6;--gold:#ffd166;--green:#49ff9f;--red:#ff5d78;--shadow:0 34px 100px rgba(0,0,0,.55);--r:30px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;overflow-x:hidden}body:before{content:"";position:fixed;inset:-30%;z-index:-5;background:radial-gradient(circle at 10% 10%,rgba(255,70,208,.42),transparent 24%),radial-gradient(circle at 88% 7%,rgba(82,245,255,.34),transparent 28%),radial-gradient(circle at 48% 90%,rgba(139,92,246,.38),transparent 32%),linear-gradient(135deg,#04040a,#11152f 45%,#050612);animation:sky 16s ease-in-out infinite alternate}body:after{content:"";position:fixed;inset:0;z-index:-4;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(circle at 50% 30%,black,transparent 75%)}@keyframes sky{to{filter:hue-rotate(35deg) saturate(1.25)}}.noise{position:fixed;inset:0;pointer-events:none;z-index:-3;opacity:.2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}.orb{position:fixed;border-radius:999px;filter:blur(2px);z-index:-2;animation:orb 10s ease-in-out infinite}.o1{width:220px;height:220px;left:-90px;top:140px;background:rgba(255,209,102,.17)}.o2{width:320px;height:320px;right:-140px;top:430px;background:rgba(82,245,255,.15);animation-delay:-3s}.o3{width:180px;height:180px;left:54%;bottom:50px;background:rgba(255,70,208,.15);animation-delay:-6s}@keyframes orb{50%{transform:translate3d(28px,-36px,0) scale(1.1)}}.app{width:min(1220px,94vw);margin:auto;padding:20px 0 54px}.dock{position:sticky;top:10px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid var(--line);border-radius:26px;background:rgba(6,7,18,.66);backdrop-filter:blur(26px);box-shadow:0 20px 70px rgba(0,0,0,.28)}.brand{display:flex;align-items:center;gap:12px}.logo{width:50px;height:50px;border-radius:18px;background:conic-gradient(from 160deg,var(--cyan),var(--violet),var(--pink),var(--gold),var(--cyan));display:grid;place-items:center;font-weight:1000;color:#050612;box-shadow:0 0 42px rgba(82,245,255,.28)}.brand h1{margin:0;font-size:19px;letter-spacing:-.03em}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}.dock a,.chipBtn{color:var(--text);text-decoration:none;border:1px solid var(--line);padding:10px 13px;border-radius:16px;background:rgba(255,255,255,.06);font-size:13px;font-weight:900}.nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.hero{display:grid;grid-template-columns:1.14fr .86fr;gap:22px;margin-top:22px}.glass{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.045));box-shadow:var(--shadow);backdrop-filter:blur(26px);overflow:hidden;position:relative}.heroMain{min-height:430px;padding:34px}.heroMain:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 15%,rgba(255,209,102,.18),transparent 28%),radial-gradient(circle at 82% 22%,rgba(82,245,255,.18),transparent 34%);z-index:-1}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(73,255,159,.28);background:rgba(73,255,159,.1);color:#caffdf;font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.08em}.heroMain h2{font-size:clamp(46px,8vw,94px);line-height:.86;margin:22px 0 14px;letter-spacing:-.08em}.grad{background:linear-gradient(90deg,var(--cyan),#fff,var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}.sub{color:#dfe2ff;line-height:1.65;font-size:17px;max-width:650px}.heroActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.btn{border:0;border-radius:18px;padding:14px 18px;background:linear-gradient(135deg,var(--cyan),var(--gold));color:#050612;font-weight:1000;cursor:pointer;box-shadow:0 24px 55px rgba(82,245,255,.2)}.btn.secondary{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--line);box-shadow:none}.phoneWrap{padding:24px;display:grid;place-items:center}.phone{width:min(390px,100%);border-radius:46px;padding:14px;background:linear-gradient(155deg,rgba(255,255,255,.2),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.20);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),0 34px 100px rgba(0,0,0,.5);transform:rotate(1.2deg)}.screen{border-radius:34px;padding:18px;background:rgba(8,9,22,.88);border:1px solid var(--line);min-height:360px}.status{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.livePay{margin:20px 0;padding:18px;border-radius:28px;background:radial-gradient(circle at top right,rgba(82,245,255,.18),transparent 45%),rgba(255,255,255,.07);border:1px solid var(--line)}.livePay span{color:var(--muted);font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:.08em}.livePay b{display:block;font-size:42px;letter-spacing:-.06em;margin-top:5px}.miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini{padding:13px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}.mini small{color:var(--muted);display:block}.mini b{font-size:17px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:22px 0}.stat{padding:20px;border-radius:26px;border:1px solid var(--line);background:rgba(255,255,255,.075);backdrop-filter:blur(22px);position:relative;overflow:hidden}.stat:after{content:"";position:absolute;inset:auto -20px -35px auto;width:95px;height:95px;border-radius:999px;background:rgba(82,245,255,.12);filter:blur(5px)}.stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:1000}.stat b{display:block;font-size:28px;letter-spacing:-.05em;margin-top:6px}.grid{display:grid;grid-template-columns:430px 1fr;gap:22px;align-items:start}.panel{padding:22px;margin-bottom:22px}.title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}.title h3{margin:0;font-size:26px;letter-spacing:-.04em}.title p{margin:4px 0 0;color:var(--muted);font-size:13px}.pill{font-size:12px;color:#050612;background:var(--gold);border-radius:999px;padding:8px 11px;font-weight:1000;white-space:nowrap}label{display:block;margin:0 0 8px;color:#d5d9ff;font-size:12px;text-transform:uppercase;letter-spacing:.07em;font-weight:1000}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:12px}.full{grid-column:1/-1}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.075);color:#fff;padding:14px;font:inherit;outline:none}select option{background:#101329}textarea{min-height:120px;resize:vertical}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}.shifts{display:grid;gap:14px}.shiftCard{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:15px;align-items:center;padding:18px;border-radius:26px;border:1px solid rgba(255,255,255,.15);background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05));box-shadow:0 18px 55px rgba(0,0,0,.22);overflow:hidden;animation:pop .28s ease both}.shiftCard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(var(--cyan),var(--pink),var(--gold))}.shiftCard:after{content:"";position:absolute;right:-55px;bottom:-70px;width:150px;height:150px;border-radius:999px;background:rgba(255,70,208,.10);filter:blur(2px)}@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}.dateBox{width:64px;height:64px;border-radius:22px;background:rgba(255,255,255,.09);border:1px solid var(--line);display:grid;place-items:center;text-align:center}.dateBox b{font-size:24px}.dateBox small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;font-weight:900}.shiftCard h4{margin:0 0 7px;font-size:18px}.tags{display:flex;flex-wrap:wrap;gap:7px}.tag{padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#cfd4f7;font-size:12px}.cash{text-align:right;position:relative;z-index:1}.cash b{font-size:21px}.cash small{display:block;color:var(--green);font-weight:1000}.delete{margin-top:8px;border:1px solid rgba(255,93,120,.32);background:rgba(255,93,120,.14);color:#ffd4dc;border-radius:14px;padding:8px 10px;cursor:pointer}.empty{padding:38px;border-radius:28px;border:1px dashed rgba(255,255,255,.24);text-align:center;color:var(--muted);background:rgba(255,255,255,.045)}.empty b{color:#fff}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:82px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.055);padding:8px;font-size:12px;overflow:hidden}.day strong{display:block;margin-bottom:5px}.dot{display:block;padding:5px 6px;margin-top:5px;border-radius:10px;background:linear-gradient(90deg,rgba(82,245,255,.34),rgba(255,70,208,.23));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}.analytics{display:grid;grid-template-columns:1fr 1fr;gap:14px}.aCard{padding:16px;border-radius:22px;background:rgba(255,255,255,.065);border:1px solid var(--line)}.aCard span{color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase}.aCard b{display:block;margin-top:5px;font-size:23px}.bars{display:grid;gap:10px;margin-top:14px}.bar{display:grid;grid-template-columns:90px 1fr 54px;gap:10px;align-items:center;color:var(--muted);font-size:13px}.track{height:13px;background:rgba(255,255,255,.09);border-radius:999px;overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));width:0;transition:.8s}.footer{text-align:center;color:var(--muted);padding:22px}.made{color:#fff;font-weight:1000}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;z-index:50;padding:14px 18px;border-radius:18px;background:rgba(8,9,22,.9);border:1px solid var(--line);backdrop-filter:blur(20px);box-shadow:var(--shadow);transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:980px){.hero,.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.phoneWrap{display:none}.dock{align-items:flex-start}.nav{max-width:220px}.calendar{grid-template-columns:repeat(4,1fr)}}@media(max-width:560px){.app{width:min(100% - 20px,1220px)}.heroMain{padding:24px;min-height:auto}.heroMain h2{font-size:50px}.stats{grid-template-columns:1fr}.fields,.analytics{grid-template-columns:1fr}.shiftCard{grid-template-columns:1fr}.cash{text-align:left}.calendar{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body><div class="noise"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<main class="app"><nav class="dock"><div class="brand"><div class="logo">SW</div><div><h1>ShiftWise Galaxy Pro</h1><p>McDonald's shift tracker · Made by Hamed</p></div></div><div class="nav"><a href="#add">Add shift</a><a href="#diensten">Mijn diensten</a><a href="#calendar">Calendar</a><button class="chipBtn" id="resetBtn">Reset</button></div></nav>
+<section class="hero"><div class="heroMain glass"><span class="eyebrow">⚡ Live workforce dashboard</span><h2><span id="greeting">GOEDEMORGEN HAMED</span><br><span class="grad">ShiftWise</span></h2><p class="sub" id="dateLine">Vandaag</p><p class="sub">Track je diensten, pauze, salaris en <b>40% nachtbonus na 00:00</b>. Alles blijft opgeslagen in je browser.</p><div class="heroActions"><button class="btn" onclick="document.getElementById('add').scrollIntoView({behavior:'smooth'})">Nieuwe shift toevoegen</button><button class="btn secondary" id="demoBtn">Demo vullen</button></div></div><div class="phoneWrap glass"><div class="phone"><div class="screen"><div class="status"><span>9:41</span><span>ShiftWise</span></div><div class="livePay"><span>Deze maand verdiend</span><b id="phonePay">€0</b></div><div class="miniGrid"><div class="mini"><small>Uren</small><b id="phoneHours">0h</b></div><div class="mini"><small>Nachtbonus</small><b id="phoneBonus">€0</b></div><div class="mini"><small>Volgende</small><b id="phoneNext">—</b></div><div class="mini"><small>Diensten</small><b id="phoneCount">0</b></div></div></div></div></div></section>
+<section class="stats"><div class="stat"><span>Deze week</span><b id="weekHours">0h</b></div><div class="stat"><span>Deze maand</span><b id="monthHours">0h</b></div><div class="stat"><span>Verdienen</span><b id="monthEarn">€0</b></div><div class="stat"><span>Night bonus</span><b id="nightBonus">€0</b></div><div class="stat"><span>Diensten</span><b id="shiftCount">0</b></div></section>
+<section class="grid"><aside><div class="panel glass" id="add"><div class="title"><div><h3>Nieuwe shift</h3><p>Start, eind, pauze en positie.</p></div><span class="pill">140% na 00:00</span></div><div class="fields"><div class="field full"><label>Datum</label><input type="date" id="date"></div><div class="field"><label>Start</label><input type="time" id="start" value="17:30"></div><div class="field"><label>Eind</label><input type="time" id="end" value="01:30"></div><div class="field"><label>Pauze minuten</label><input type="number" id="break" min="0" value="30"></div><div class="field"><label>Uurloon €</label><input type="number" id="rate" step="0.01" value="12.41"></div><div class="field full"><label>Positie</label><select id="position"><option>MPS</option><option>Crew Trainer</option><option>Kitchen</option><option>Service</option><option>Lobby</option><option>Close</option></select></div></div><div class="actions"><button class="btn" id="saveBtn">Opslaan</button><button class="btn secondary" id="clearBtn">Leeg maken</button></div></div><div class="panel glass"><div class="title"><div><h3>Import rooster</h3><p>Plak Gmail/rooster tekst.</p></div></div><textarea id="importText" placeholder="vrijdag 17 juli 2026 20:30 - 02:30, MPS"></textarea><div class="actions"><button class="btn" id="importBtn">Importeer</button></div></div></aside><section><div class="panel glass" id="diensten"><div class="title"><div><h3>Mijn diensten</h3><p id="savedText">Nog geen diensten hier.</p></div><span class="pill" id="livePill">Live</span></div><div class="shifts" id="shiftList"></div></div><div class="panel glass" id="calendar"><div class="title"><div><h3>Galaxy calendar</h3><p>Mini maandplanning.</p></div></div><div class="calendar" id="calendarGrid"></div></div><div class="panel glass"><div class="title"><div><h3>Analytics</h3><p>Professionele stats.</p></div></div><div class="analytics"><div class="aCard"><span>Langste shift</span><b id="longest">0h</b></div><div class="aCard"><span>Gemiddeld</span><b id="average">0h</b></div><div class="aCard"><span>Meest gewerkt</span><b id="topPosition">—</b></div><div class="aCard"><span>Nachturen</span><b id="nightHours">0h</b></div></div><div class="bars" id="bars"></div></div></section></section><footer class="footer"><span class="made">Made by Hamed</span> · ShiftWise Galaxy Pro © 2026</footer></main><div class="toast" id="toast">Opgeslagen</div>
+<script>
+const KEY='shiftwise_galaxy_pro_v2'; const $=id=>document.getElementById(id);
+const fmtEUR=n=>new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR'}).format(n||0);
+const months=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec']; const dayNames=['Zo','Ma','Di','Wo','Do','Vr','Za'];
+const monthMap={januari:0,jan:0,februari:1,feb:1,maart:2,mrt:2,april:3,apr:3,mei:4,juni:5,jun:5,juli:6,jul:6,augustus:7,aug:7,september:8,sep:8,oktober:9,okt:9,november:10,nov:10,december:11,dec:11};
+let shifts=[]; try{shifts=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){shifts=[]}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1700)}
+function persist(){localStorage.setItem(KEY,JSON.stringify(shifts));render()}
+function startEnd(date,start,end){const s=new Date(date+'T'+start);let e=new Date(date+'T'+end);if(e<=s)e.setDate(e.getDate()+1);return [s,e]}
+function calc(sh){let [s,e]=startEnd(sh.date,sh.start,sh.end);let total=(e-s)/60000;let br=Number(sh.break||0);total=Math.max(0,total-br);let midnight=new Date(s);midnight.setHours(24,0,0,0);let night=e>midnight?(e-Math.max(s,midnight))/60000:0;night=Math.max(0,Math.min(night,total));let rate=Number(sh.rate||12.41);let base=(total/60)*rate;let bonus=(night/60)*rate*.4;return{total,night,base,bonus,totalPay:base+bonus}}
+function isWeek(d){let now=new Date(),date=new Date(d+'T12:00'),start=new Date(now);let day=(start.getDay()+6)%7;start.setDate(start.getDate()-day);start.setHours(0,0,0,0);let end=new Date(start);end.setDate(end.getDate()+7);return date>=start&&date<end}
+function isMonth(d){let now=new Date(),date=new Date(d+'T12:00');return date.getMonth()===now.getMonth()&&date.getFullYear()===now.getFullYear()}
+function moneyCount(id,value){$(id).textContent=fmtEUR(value)}
+function render(){shifts.sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));const list=$('shiftList');list.innerHTML='';$('savedText').textContent=shifts.length?`${shifts.length} dienst${shifts.length>1?'en':''} opgeslagen — hieronder staan je echte shift cards.`:'Nog geen diensten hier. Voeg je eerste shift toe.';if(!shifts.length){list.innerHTML='<div class="empty"><b>Nog geen diensten hier.</b><br>Voeg je eerste shift toe. Daarna komt hij direct hier onder “Mijn diensten”.</div>'}shifts.forEach((sh,i)=>{const c=calc(sh),d=new Date(sh.date+'T12:00');const el=document.createElement('article');el.className='shiftCard';el.innerHTML=`<div class="dateBox"><div><b>${d.getDate()}</b><small>${months[d.getMonth()]}</small></div></div><div><h4>${sh.position}</h4><div class="tags"><span class="tag">${dayNames[d.getDay()]} ${sh.start} → ${sh.end}</span><span class="tag">${(c.total/60).toFixed(1)} uur</span><span class="tag">Pauze ${sh.break||0} min</span><span class="tag">🌙 ${(c.night/60).toFixed(1)} nacht</span></div></div><div class="cash"><b>${fmtEUR(c.totalPay)}</b><small>+ ${fmtEUR(c.bonus)} bonus</small><button class="delete" data-i="${i}">Verwijder</button></div>`;list.appendChild(el)});document.querySelectorAll('.delete').forEach(b=>b.onclick=()=>{shifts.splice(Number(b.dataset.i),1);persist();toast('Shift verwijderd')});
+const month=shifts.filter(x=>isMonth(x.date));const weekH=shifts.filter(x=>isWeek(x.date)).reduce((a,x)=>a+calc(x).total,0)/60;const monthH=month.reduce((a,x)=>a+calc(x).total,0)/60;const earn=month.reduce((a,x)=>a+calc(x).totalPay,0);const bonus=month.reduce((a,x)=>a+calc(x).bonus,0);const night=shifts.reduce((a,x)=>a+calc(x).night,0)/60;$('weekHours').textContent=weekH.toFixed(1)+'h';$('monthHours').textContent=monthH.toFixed(1)+'h';moneyCount('monthEarn',earn);moneyCount('nightBonus',bonus);$('shiftCount').textContent=shifts.length;$('phonePay').textContent=fmtEUR(earn);$('phoneHours').textContent=monthH.toFixed(1)+'h';$('phoneBonus').textContent=fmtEUR(bonus);$('phoneCount').textContent=shifts.length;let next=shifts.find(x=>new Date(x.date+'T'+x.start)>new Date());$('phoneNext').textContent=next?`${new Date(next.date+'T12:00').getDate()} ${months[new Date(next.date+'T12:00').getMonth()]}`:'—';
+const totals=shifts.map(calc);$('longest').textContent=totals.length?(Math.max(...totals.map(x=>x.total))/60).toFixed(1)+'h':'0h';$('average').textContent=totals.length?((totals.reduce((a,x)=>a+x.total,0)/totals.length)/60).toFixed(1)+'h':'0h';$('nightHours').textContent=night.toFixed(1)+'h';let pos={};shifts.forEach(s=>pos[s.position]=(pos[s.position]||0)+calc(s).total/60);$('topPosition').textContent=Object.keys(pos).length?Object.entries(pos).sort((a,b)=>b[1]-a[1])[0][0]:'—';renderBars(pos);renderCalendar()}
+function renderBars(pos){const bars=$('bars');bars.innerHTML='';let max=Math.max(1,...Object.values(pos));if(!Object.keys(pos).length){bars.innerHTML='<div class="empty">Nog geen analytics. Voeg shifts toe.</div>';return}Object.entries(pos).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{let row=document.createElement('div');row.className='bar';row.innerHTML=`<b>${k}</b><div class="track"><div class="fill" style="width:${(v/max)*100}%"></div></div><span>${v.toFixed(1)}h</span>`;bars.appendChild(row)})}
+function renderCalendar(){const cal=$('calendarGrid');cal.innerHTML='';let now=new Date(),y=now.getFullYear(),m=now.getMonth(),days=new Date(y,m+1,0).getDate();for(let d=1;d<=days;d++){let iso=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;let daySh=shifts.filter(s=>s.date===iso);let div=document.createElement('div');div.className='day';div.innerHTML=`<strong>${d} ${months[m]}</strong>`+daySh.map(s=>`<span class="dot">${s.start} ${s.position}</span>`).join('');cal.appendChild(div)}}
+function addShift(){let sh={date:$('date').value,start:$('start').value,end:$('end').value,break:$('break').value,rate:$('rate').value,position:$('position').value};if(!sh.date||!sh.start||!sh.end){toast('Vul datum, start en eind in');return}shifts.push(sh);persist();toast('Shift opgeslagen onder Mijn diensten')}
+function parseImport(){let t=$('importText').value;let re=/(\d{1,2})\s+([a-zA-ZÀ-ÿ]+)\s+(20\d{2}).*?(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})(?:,\s*([^\n.]+))?/gi;let add=0,m;while((m=re.exec(t))){let mon=monthMap[m[2].toLowerCase()];if(mon==null)continue;shifts.push({date:`${m[3]}-${String(mon+1).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`,start:m[4],end:m[5],break:30,rate:$('rate').value||12.41,position:(m[6]||'MPS').trim()});add++}persist();toast(add?`${add} shifts geïmporteerd`:'Geen shifts gevonden')}
+function demo(){let n=new Date(),y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,'0');shifts=[{date:`${y}-${m}-03`,start:'17:30',end:'01:30',break:30,rate:12.41,position:'MPS'},{date:`${y}-${m}-08`,start:'18:30',end:'02:30',break:30,rate:12.41,position:'Close'},{date:`${y}-${m}-14`,start:'14:00',end:'22:00',break:30,rate:12.41,position:'Crew Trainer'},{date:`${y}-${m}-21`,start:'20:30',end:'02:30',break:30,rate:12.41,position:'MPS'}];persist();toast('Demo shifts toegevoegd')}
+$('saveBtn').onclick=addShift;$('importBtn').onclick=parseImport;$('demoBtn').onclick=demo;$('clearBtn').onclick=()=>{$('date').value='';$('start').value='17:30';$('end').value='01:30';$('break').value=30};$('resetBtn').onclick=()=>{if(confirm('Alles verwijderen?')){shifts=[];persist();toast('Alles verwijderd')}};let h=new Date().getHours();$('greeting').textContent=(h<12?'GOEDEMORGEN':h<18?'GOEDEMIDDAG':'GOEDEAVOND')+' HAMED '+(h<12?'☀️':h<18?'⚡':'🌙');$('dateLine').textContent=new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · Crew Trainer · McDonald\'s Waardenburg';$('date').valueAsDate=new Date();render();
+</script></body></html>

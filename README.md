@@ -1,12 +1,5 @@
-# ShiftWise
+# ShiftWise Galaxy Pro
 
-Modern shift tracker made by Hamed.
+Upload `index.html` to GitHub Pages.
 
-## Upload to GitHub Pages
-Upload these files to your GitHub repository:
-- index.html
-- style.css
-- app.js
-- README.md
-
-Then go to Settings → Pages → Deploy from branch → main → root.
+Features: shift cards, break minutes, 40% night bonus after 00:00, calendar, analytics, Made by Hamed.
