@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mac Tracker | Made by Hamed</title>
+  <meta name="theme-color" content="#111111" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="orb one"></div><div class="orb two"></div><div class="orb three"></div>
+  <div class="wrap">
+    <header>
+      <div class="brand"><div class="logo">🍟</div><div><h1>Mac Tracker</h1><div class="sub">Shift planner • pauze calculator • salaris overzicht</div></div></div>
+      <div class="made">✨ Made by Hamed</div>
+    </header>
+
+    <section class="hero glass">
+      <div class="heroTop">
+        <div class="titleCard">
+          <div class="badge">Live work dashboard</div>
+          <h2>Track je shifts als een pro.</h2>
+          <p>Voeg diensten toe, importeer je rooster tekst en zie direct je uren, pauze, verdiende geld en volgende shift. Alles blijft opgeslagen op je telefoon/browser.</p>
+        </div>
+        <div class="miniPanel">
+          <div>
+            <div class="sub">Vandaag</div>
+            <div class="bigTime" id="clock">00:00</div>
+            <div class="quote" id="todayLine">Klaar voor je volgende shift?</div>
+          </div>
+          <div>
+            <div class="sub">Maand progress</div>
+            <div class="progress"><div class="bar" id="monthBar"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Deze week</span><b id="weekHours">0h</b><small id="weekCount">0 diensten</small></div>
+        <div class="stat"><span>Deze maand</span><b id="monthHours">0h</b><small id="monthCount">0 diensten</small></div>
+        <div class="stat"><span>Verdiend</span><b id="earned">€0</b><small>deze maand</small></div>
+        <div class="stat"><span>Aankomend</span><b id="nextShift">–</b><small id="nextInfo">niets gepland</small></div>
+      </div>
+    </section>
+
+    <main class="layout">
+      <section class="card glass">
+        <h3>Nieuwe dienst</h3>
+        <div class="form">
+          <div><label>Datum</label><input id="date" type="date"></div>
+          <div><label>Positie</label><input id="position" placeholder="MPS, Kitchen, Counter..."></div>
+          <div><label>Start</label><input id="start" type="time"></div>
+          <div><label>Einde</label><input id="end" type="time"></div>
+          <div><label>Pauze minuten</label><input id="break" type="number" min="0" step="5" value="30"></div>
+          <div><label>Uurloon €</label><input id="rate" type="number" min="0" step="0.01" value="12.41"></div>
+          <div class="full"><label>Notitie</label><input id="note" placeholder="Bijv. close, training, extra shift"></div>
+        </div>
+        <div class="actions">
+          <button onclick="addShift()">+ Dienst toevoegen</button>
+          <button class="secondary" onclick="fillDemo()">Demo</button>
+          <button class="secondary" onclick="exportData()">Backup</button>
+          <button class="danger" onclick="clearAll()">Wissen</button>
+        </div>
+      </section>
+
+      <section class="card glass">
+        <h3>Import tekst / Gmail</h3>
+        <p class="helper">Plak één of meerdere regels. Voorbeeld: <b>vrijdag 17 juli 2026 20:30 - 02:30, MPS</b>. Import gebruikt automatisch 30 min pauze.</p>
+        <textarea id="importText" rows="4" placeholder="Plak hier je rooster tekst..."></textarea>
+        <div class="actions"><button onclick="importShifts()">Importeer shifts</button></div>
+        <div class="toolbar"><h3 style="margin:0">Diensten</h3><input class="search" id="search" placeholder="Zoek positie/notitie..." oninput="render()"></div>
+        <div id="list"></div>
+      </section>
+    </main>
+    <div class="footer">🍔 Mac Tracker — <b>Made by Hamed</b></div>
+  </div>
+  <div class="toast" id="toast">Opgeslagen</div>
+<script src="app.js"></script>
+</body>
+</html>
