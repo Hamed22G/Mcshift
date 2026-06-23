@@ -1,82 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mac Tracker | Made by Hamed</title>
-  <meta name="theme-color" content="#111111" />
+  <title>CrewFlow by Hamed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="orb one"></div><div class="orb two"></div><div class="orb three"></div>
-  <div class="wrap">
-    <header>
-      <div class="brand"><div class="logo">🍟</div><div><h1>Mac Tracker</h1><div class="sub">Shift planner • pauze calculator • salaris overzicht</div></div></div>
-      <div class="made">✨ Made by Hamed</div>
+  <div class="ambient one"></div>
+  <div class="ambient two"></div>
+
+  <main class="app-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="logo">CF</span>
+          <div>
+            <strong>CrewFlow</strong>
+            <small>Made by Hamed</small>
+          </div>
+        </div>
+        <div class="live-chip"><span></span><b id="clock">--:--</b></div>
+      </nav>
+
+      <section class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">McDonald’s shift tracker</p>
+          <h1>Track your hours, breaks & night bonus like a pro.</h1>
+          <p class="subtitle">Modern planner voor je diensten, pauzes, import uit rooster tekst en automatisch <b>40% bonus na 00:00</b>.</p>
+          <div class="hero-actions">
+            <a href="#add" class="btn primary">+ Dienst toevoegen</a>
+            <button class="btn ghost" onclick="fillDemo()">Demo invullen</button>
+          </div>
+        </div>
+        <div class="pay-card glass">
+          <div class="pay-top">
+            <small>Deze maand verdiend</small>
+            <span>incl. night bonus</span>
+          </div>
+          <strong id="earnedBig">€0</strong>
+          <div class="progress-wrap"><div id="monthBar"></div></div>
+          <p><b id="bonusText">€0</b> extra door 40% na middernacht</p>
+        </div>
+      </section>
     </header>
 
-    <section class="hero glass">
-      <div class="heroTop">
-        <div class="titleCard">
-          <div class="badge">Live work dashboard</div>
-          <h2>Track je shifts als een pro.</h2>
-          <p>Voeg diensten toe, importeer je rooster tekst en zie direct je uren, pauze, verdiende geld en volgende shift. Alles blijft opgeslagen op je telefoon/browser.</p>
-        </div>
-        <div class="miniPanel">
-          <div>
-            <div class="sub">Vandaag</div>
-            <div class="bigTime" id="clock">00:00</div>
-            <div class="quote" id="todayLine">Klaar voor je volgende shift?</div>
-          </div>
-          <div>
-            <div class="sub">Maand progress</div>
-            <div class="progress"><div class="bar" id="monthBar"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="stats">
-        <div class="stat"><span>Deze week</span><b id="weekHours">0h</b><small id="weekCount">0 diensten</small></div>
-        <div class="stat"><span>Deze maand</span><b id="monthHours">0h</b><small id="monthCount">0 diensten</small></div>
-        <div class="stat"><span>Verdiend</span><b id="earned">€0</b><small>deze maand</small></div>
-        <div class="stat"><span>Aankomend</span><b id="nextShift">–</b><small id="nextInfo">niets gepland</small></div>
-      </div>
+    <section class="stats">
+      <article class="stat glass"><span>Deze week</span><strong id="weekHours">0h</strong><small id="weekCount">0 diensten</small></article>
+      <article class="stat glass"><span>Deze maand</span><strong id="monthHours">0h</strong><small id="monthCount">0 diensten</small></article>
+      <article class="stat glass"><span>Night bonus</span><strong id="nightHours">0h</strong><small>na 00:00 = 140%</small></article>
+      <article class="stat glass"><span>Aankomend</span><strong id="nextShift">–</strong><small id="nextInfo">niets gepland</small></article>
     </section>
 
-    <main class="layout">
-      <section class="card glass">
-        <h3>Nieuwe dienst</h3>
-        <div class="form">
-          <div><label>Datum</label><input id="date" type="date"></div>
-          <div><label>Positie</label><input id="position" placeholder="MPS, Kitchen, Counter..."></div>
-          <div><label>Start</label><input id="start" type="time"></div>
-          <div><label>Einde</label><input id="end" type="time"></div>
-          <div><label>Pauze minuten</label><input id="break" type="number" min="0" step="5" value="30"></div>
-          <div><label>Uurloon €</label><input id="rate" type="number" min="0" step="0.01" value="12.41"></div>
-          <div class="full"><label>Notitie</label><input id="note" placeholder="Bijv. close, training, extra shift"></div>
+    <section class="workspace">
+      <form id="add" class="panel glass" onsubmit="event.preventDefault(); addShift();">
+        <div class="section-title">
+          <div><p>New shift</p><h2>Dienst toevoegen</h2></div>
+          <span class="tag">Pauze + Bonus fixed</span>
         </div>
-        <div class="actions">
-          <button onclick="addShift()">+ Dienst toevoegen</button>
-          <button class="secondary" onclick="fillDemo()">Demo</button>
-          <button class="secondary" onclick="exportData()">Backup</button>
-          <button class="danger" onclick="clearAll()">Wissen</button>
+        <div class="form-grid">
+          <label>Datum<input id="date" type="date" required></label>
+          <label>Start<input id="start" type="time" value="17:30" required></label>
+          <label>Einde<input id="end" type="time" value="01:30" required></label>
+          <label>Pauze minuten<input id="break" type="number" min="0" value="30"></label>
+          <label>Uurloon (€)<input id="rate" type="number" step="0.01" value="12.41"></label>
+          <label>Positie<input id="position" placeholder="MPS, Close, Lobby..."></label>
+          <label class="wide">Notitie<input id="note" placeholder="Bijv. close shift, extra druk, training..."></label>
         </div>
-      </section>
+        <button class="btn primary wide-btn" type="submit">Dienst opslaan</button>
+      </form>
 
-      <section class="card glass">
-        <h3>Import tekst / Gmail</h3>
-        <p class="helper">Plak één of meerdere regels. Voorbeeld: <b>vrijdag 17 juli 2026 20:30 - 02:30, MPS</b>. Import gebruikt automatisch 30 min pauze.</p>
-        <textarea id="importText" rows="4" placeholder="Plak hier je rooster tekst..."></textarea>
-        <div class="actions"><button onclick="importShifts()">Importeer shifts</button></div>
-        <div class="toolbar"><h3 style="margin:0">Diensten</h3><input class="search" id="search" placeholder="Zoek positie/notitie..." oninput="render()"></div>
-        <div id="list"></div>
+      <section class="panel glass">
+        <div class="section-title">
+          <div><p>Smart import</p><h2>Rooster plakken</h2></div>
+          <span class="tag">Gmail / rooster tekst</span>
+        </div>
+        <textarea id="importText" placeholder="Plak hier bijvoorbeeld:\nvrijdag 17 juli 2026 20:30 - 02:30, MPS\nza 18 jul 2026 17:30-01:30 Close"></textarea>
+        <div class="button-row">
+          <button class="btn ghost" onclick="importShifts()">Importeer shifts</button>
+          <button class="btn ghost" onclick="exportData()">Backup</button>
+          <button class="btn danger" onclick="clearAll()">Alles wissen</button>
+        </div>
+        <p class="hint">Import gebruikt standaard 30 minuten pauze en berekent bonus automatisch na 00:00.</p>
       </section>
-    </main>
-    <div class="footer">🍔 Mac Tracker — <b>Made by Hamed</b></div>
-  </div>
-  <div class="toast" id="toast">Opgeslagen</div>
-<script src="app.js"></script>
+    </section>
+
+    <section class="panel glass shifts-panel">
+      <div class="section-title">
+        <div><p id="todayLine">Ready</p><h2>Mijn diensten</h2></div>
+        <input id="search" class="search" oninput="render()" placeholder="Zoek positie/notitie...">
+      </div>
+      <div id="list" class="shift-list"></div>
+    </section>
+
+    <footer>Made with focus by <b>Hamed</b> · CrewFlow 2026</footer>
+  </main>
+
+  <div id="toast" class="toast">Saved</div>
+  <script src="app.js"></script>
 </body>
 </html>

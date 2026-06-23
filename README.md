@@ -1,12 +1,11 @@
-# Mac Tracker
+# CrewFlow by Hamed
 
-Modern shift tracker made by Hamed.
+Modern McDonald's shift tracker with:
+- Break / pauze minutes
+- 40% night bonus after 00:00
+- Monthly and weekly stats
+- Roster text import
+- Backup export
+- Made by Hamed branding
 
-## Upload to GitHub Pages
-1. Create a new GitHub repository.
-2. Upload `index.html`, `style.css`, and `app.js` in the main/root folder.
-3. Go to Settings → Pages.
-4. Source: Deploy from branch → main → root.
-5. Open your GitHub Pages link.
-
-Made by Hamed.
+Upload all files to GitHub Pages: `index.html`, `style.css`, `app.js`, `README.md`.
